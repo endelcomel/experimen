@@ -1,9 +1,3 @@
-// Fungsi untuk mendapatkan parameter dari URL
-function getUrlParameter(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
     const output = document.getElementById('output');
 
@@ -14,9 +8,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Hitung partNumber berdasarkan database_id
-    const totalParts = 5; // Total jumlah file database
-    const partNumber = ((databaseId % totalParts) || totalParts); // Pastikan hasilnya antara 1 dan 5
+    // Hitung partNumber berdasarkan rentang database_id
+    const chunkSize = 25373; // Ukuran setiap bagian
+    const partNumber = Math.ceil(databaseId / chunkSize);
     console.log(`Database ID: ${databaseId}, Part Number: ${partNumber}`);
 
     // Tentukan file database
