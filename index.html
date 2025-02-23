@@ -6,8 +6,13 @@
     <title>Database API</title>
 </head>
 <body>
-    <pre id="output">Loading...</pre>
+    <h1>Database Viewer</h1>
+    <p>Masukkan ID Database:</p>
+    <input type="text" id="databaseIdInput" placeholder="Contoh: 58152850">
+    <button id="loadDataButton">Load Data</button>
+    <pre id="output">Hasil akan ditampilkan di sini...</pre>
 
+    <!-- Load SQL.js HTTP-VFS -->
     <script src="https://cdn.jsdelivr.net/npm/sql.js@1.7.0/dist/sql-wasm.js"></script>
     <script src="script.js"></script>
 </body>
