@@ -1,3 +1,9 @@
+// Fungsi untuk mendapatkan parameter dari URL
+function getUrlParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const output = document.getElementById('output');
 
@@ -8,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Hitung partNumber
+    // Hitung partNumber berdasarkan database_id
     const totalParts = 5; // Total jumlah file database
     const partNumber = ((databaseId % totalParts) || totalParts); // Pastikan hasilnya antara 1 dan 5
     console.log(`Database ID: ${databaseId}, Part Number: ${partNumber}`);
@@ -39,7 +45,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const result = db.exec(query);
 
         // Tampilkan hasil dalam format JSON
-        output.textContent = JSON.stringify(result, null, 2);
+        if (result.length > 0 && result[0].values.length > 0) {
+            output.textContent = JSON.stringify(result[0].values, null, 2);
+        } else {
+            output.textContent = 'No data found for the given database_id.';
+        }
     } catch (error) {
         output.textContent = `Error: ${error.message}`;
     }
