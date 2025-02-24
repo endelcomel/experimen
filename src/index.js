@@ -1,4 +1,4 @@
-import "./styles.css";
+import "/src/styles.css";
 import { createDbWorker } from "sql.js-httpvfs";
 
 const workerUrl = "/src/sqlite.worker.js";
