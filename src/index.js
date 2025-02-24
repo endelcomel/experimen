@@ -12,7 +12,7 @@ async function load() {
         from: "inline",
         config: {
           serverMode: "full",
-          url: "data/db_1.db",
+          url: "db_1.sqlite3",
           requestChunkSize: 4096
         }
       }
@@ -22,7 +22,7 @@ async function load() {
   );
 
   console.log("before awaitworkerdb");
-  const result = await worker.db.query(`select * from questions ORDER BY rowid DESC LIMIT 1`);
+  const result = await worker.db.query(`select * from questions`);
 
   document.getElementById("app").innerHTML = JSON.stringify(result);
 }
