@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database API</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQLite Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
 </head>
 <body>
-    <h1>Database Viewer</h1>
-    <p>Masukkan ID Database:</p>
-    <input type="text" id="databaseIdInput" placeholder="Contoh: 58152850">
-    <button id="loadDataButton">Load Data</button>
-    <pre id="output">Hasil akan ditampilkan di sini...</pre>
+  <h1>SQLite Database Viewer</h1>
+  <p>Menampilkan data dari tabel <code>questions</code>.</p>
 
-    <!-- Load SQL.js HTTP-VFS -->
-    <script src="https://cdn.jsdelivr.net/npm/sql.js@1.7.0/dist/sql-wasm.js"></script>
-    <script src="script.js"></script>
+  <div id="output"></div>
+
+  <!-- Load script.js -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
