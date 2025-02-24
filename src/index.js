@@ -22,7 +22,7 @@ async function load() {
   );
 
   console.log("before awaitworkerdb");
-  const result = await worker.db.query(`select * from questions`);
+  const result = await worker.db.query(`select * from questions ORDER BY rowid DESC LIMIT 1`);
 
   document.getElementById("app").innerHTML = JSON.stringify(result);
 }
