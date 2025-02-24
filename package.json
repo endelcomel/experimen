@@ -1,12 +1,21 @@
 {
+  "name": "sqljs-httpvfs-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
   "dependencies": {
-    "sql.js-httpvfs": "^0.8.8"
+    "parcel-bundler": "^1.6.1",
+    "sql.js-httpvfs": "0.8.11"
   },
   "devDependencies": {
-    "http-server": "^0.12.3",
-    "ts-loader": "^9.1.2",
-    "typescript": "^4.2.4",
-    "webpack": "^5.36.2",
-    "webpack-cli": "^4.7.0"
-  }
+    "@babel/core": "7.2.0"
+  },
+  "resolutions": {
+    "@babel/preset-env": "7.13.8"
+  },
+  "keywords": []
 }
