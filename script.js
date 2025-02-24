@@ -1,34 +1,52 @@
-// Import createDbWorker dari CDN sql.js-httpvfs
-import { createDbWorker } from "https://cdn.jsdelivr.net/npm/sql.js-httpvfs/dist/sqlite.worker.js";
+// Import createDbWorker sebagai default import
+import createDbWorker from "https://cdn.jsdelivr.net/npm/sql.js-httpvfs/dist/sqlite.worker.js";
 
-async function setup() {
+let worker = null;
+
+async function setupDatabase() {
   try {
     // Konfigurasi untuk mengakses database SQLite
-    const worker = await createDbWorker(
+    const workerUrl = new URL(
+      "https://cdn.jsdelivr.net/npm/sql.js-httpvfs/dist/sqlite.worker.js",
+      import.meta.url
+    );
+    const wasmUrl = new URL(
+      "https://cdn.jsdelivr.net/npm/sql.js-httpvfs/dist/sql-wasm.wasm",
+      import.meta.url
+    );
+
+    worker = await createDbWorker(
       [
         {
           from: "inline", // Menggunakan file SQLite dari URL
           config: {
             serverMode: "full", // Mode server penuh
-            url: "data/db_1.db", // Path relatif ke file database SQLite
+            url: "data/db_1.db", // Path ke file database SQLite
             requestChunkSize: 4096, // Ukuran chunk untuk permintaan HTTP
           },
         },
       ],
-      new URL("https://cdn.jsdelivr.net/npm/sql.js-httpvfs/dist/sqlite.worker.js"),
-      new URL("assets/sql-wasm.wasm") // Path ke file WASM
+      workerUrl.toString(),
+      wasmUrl.toString()
     );
+  } catch (error) {
+    console.error("Error setting up database:", error);
+    document.getElementById("output").innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
 
+async function getQuestionsData() {
+  try {
     // Query untuk mengambil data dari tabel 'questions'
-    const result = await worker.db.query(`
-      SELECT author_nick, subject_name, typename, database_id, content, created, thumbnail_url
-      FROM questions
-      LIMIT 10
-    `);
+    const result = await worker.db.exec(
+      `SELECT author_nick, subject_name, typename, database_id, content, created, thumbnail_url FROM questions LIMIT 10`
+    );
 
     // Menampilkan hasil query dalam tabel HTML
     const outputDiv = document.getElementById("output");
-    if (result.length === 0) {
+    outputDiv.innerHTML = ""; // Bersihkan output sebelumnya
+
+    if (result.length === 0 || result[0].values.length === 0) {
       outputDiv.innerHTML = "<p>Tidak ada data ditemukan.</p>";
       return;
     }
@@ -48,9 +66,9 @@ async function setup() {
     table.appendChild(thead);
 
     // Isi tabel
-    result.forEach(row => {
+    result[0].values.forEach(row => {
       const tr = document.createElement("tr");
-      Object.values(row).forEach(value => {
+      row.forEach(value => {
         const td = document.createElement("td");
         td.textContent = value || "-"; // Tampilkan "-" jika nilai null
         tr.appendChild(td);
@@ -61,10 +79,16 @@ async function setup() {
 
     outputDiv.appendChild(table);
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error fetching data:", error);
     document.getElementById("output").innerHTML = `<p>Error: ${error.message}</p>`;
   }
 }
 
-// Jalankan fungsi setup saat halaman dimuat
-setup();
+// Event listener untuk tombol "Muat Data"
+document.getElementById("load-data").addEventListener("click", async () => {
+  if (!worker) {
+    await setupDatabase(); // Inisialisasi database jika belum dilakukan
+  }
+
+  getQuestionsData(); // Ambil data dari tabel 'questions'
+});
